@@ -6,7 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -17,7 +21,7 @@ import android.view.View;
  */
 public class TinyTextView extends View {
 
-    private Paint mDrawPaint;
+    private TextPaint mDrawPaint;
     private int mTextSize; //文本大小
     private int mTextColor;//文本颜色
     private String mText;//文本
@@ -25,8 +29,6 @@ public class TinyTextView extends View {
 
     public TinyTextView(Context context) {
         super(context);
-        this.mTextColor = Color.BLUE;
-        this.mTextSize = 20;
         initPaint();
     }
 
@@ -52,11 +54,12 @@ public class TinyTextView extends View {
     }
 
     private void initPaint() {
-        this.mDrawPaint = new Paint();
+        this.mDrawPaint = new TextPaint();
         this.mDrawPaint.setAntiAlias(true);
         this.mDrawPaint.setColor(this.mTextColor);
         this.mDrawPaint.setTextSize(this.mTextSize);
         this.mDrawPaint.setTextAlign(Paint.Align.LEFT);
+
     }
 
     public void setText(String mText) {
@@ -69,11 +72,13 @@ public class TinyTextView extends View {
     }
 
     public void setTextSize(int size) {
+        this.mTextSize = size;
         this.mDrawPaint.setTextSize(size);
         requestLayout();
     }
 
     public void setTextColor(int color) {
+        this.mTextColor = color;
         this.mDrawPaint.setColor(color);
         requestLayout();
     }
@@ -99,8 +104,7 @@ public class TinyTextView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         this.mDrawPaint.getTextBounds(this.mText, 0, this.mText.length(), textBoundRect);
-        float trushWidth = this.mDrawPaint.measureText(this.mText);
-        int w = calcSize(widthMeasureSpec, (int)(trushWidth + 0.5));
+        int w = calcSize(widthMeasureSpec, (int)(textBoundRect.width() + 0.5));
         int h = calcSize(heightMeasureSpec, textBoundRect.height());
         setMeasuredDimension(w, h);
 
@@ -110,9 +114,11 @@ public class TinyTextView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         refitText(mText, getWidth(), getHeight());
-        float x = 0;
-        float y = canvas.getHeight()/2-(mDrawPaint.descent()+mDrawPaint.ascent())/2;
-        canvas.drawText(this.mText, x, y, this.mDrawPaint);
+        float baseX = canvas.getWidth() / 2 - textBoundRect.width() / 2;
+        float baseY = canvas.getHeight()/2-(mDrawPaint.descent()+mDrawPaint.ascent())/2;
+
+        // 绘制文本
+        canvas.drawText(mText, baseX, baseY, mDrawPaint);
     }
 
     private void refitText(String text, int viewWidth, int viewHeight) {
