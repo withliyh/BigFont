@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.text.TextUtilsCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,20 +14,11 @@ import android.widget.TextView;
  */
 public class MainActivity extends Activity {
     private final static String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final String text = getIntent().getStringExtra("text");
-        if (false) {
-            setContentView(R.layout.activity_main);
-            TinyTextView textView = (TinyTextView) findViewById(R.id.fullscreen_content);
-            textView.setText(text);
-            textView.setTextColor(Color.RED);
-            textView.setText(text);
-            textView.setTextSize(100);
-            textView.setBackgroundColor(Color.WHITE);
-            return;
-        }
         setContentView(R.layout.activity_main_ex);
 
         final TextView textView = (TextView) findViewById(R.id.textContent);
@@ -38,9 +28,6 @@ public class MainActivity extends Activity {
         textView.setTextSize(20);
         //textView.setBackgroundColor(Color.WHITE);
         textView.setTypeface(Typeface.MONOSPACE);
-        if (false) {return;}
-
-
 
         textView.post(new Runnable() {
             @Override
@@ -55,12 +42,11 @@ public class MainActivity extends Activity {
                 int viewHeight = textView.getHeight();
 
 
-                int containerWidth = ((View)(textView.getParent())).getWidth();
-                int containerHeight = ((View)(textView.getParent())).getHeight();
-
+                int containerWidth = ((View) (textView.getParent())).getWidth();
+                int containerHeight = ((View) (textView.getParent())).getHeight();
 
                 boolean hasEmoji = false;
-                for (int i= 0; i<text.length(); i++) {
+                for (int i = 0; i < text.length(); i++) {
                     if (!isNotEmojiCharacter(text.charAt(i))) {
                         hasEmoji = true;
                         break;
@@ -75,28 +61,13 @@ public class MainActivity extends Activity {
 
                 }
 
+
+
                 textView.setScaleX(scaleVl);
                 textView.setScaleY(scaleVl);
 
-
-
-//                Animation scaleAnimation = new ScaleAnimation(1.0f, scaleVl, 1.0f, scaleVl,
-//                        Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
-//                scaleAnimation.setDuration(2000);
-//                scaleAnimation.setFillAfter(true);
-//                textView.startAnimation(scaleAnimation);
-
-
             }
         });
-//        textView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                textView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//
-//
-//            }
-//        });
 
     }
 
@@ -108,6 +79,7 @@ public class MainActivity extends Activity {
 
     /**
      * 判断是否是非Emoji字符之外的正常字符，正常字符返回true
+     *
      * @param codePoint
      * @return
      */
