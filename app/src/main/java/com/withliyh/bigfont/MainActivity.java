@@ -14,6 +14,7 @@ import android.widget.TextView;
  */
 public class MainActivity extends Activity {
     private final static String TAG = MainActivity.class.getSimpleName();
+    private final static int SAFE_PADDING = 0;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -26,9 +27,8 @@ public class MainActivity extends Activity {
         textView.setTextColor(Color.RED);
         textView.setText(text);
         textView.setTextSize(20);
-        //textView.setBackgroundColor(Color.WHITE);
+        textView.setBackgroundColor(Color.WHITE);
         textView.setTypeface(Typeface.MONOSPACE);
-
         textView.post(new Runnable() {
             @Override
             public void run() {
@@ -44,6 +44,11 @@ public class MainActivity extends Activity {
 
                 int containerWidth = ((View) (textView.getParent())).getWidth();
                 int containerHeight = ((View) (textView.getParent())).getHeight();
+
+                textWidth += SAFE_PADDING;
+                textHeight += SAFE_PADDING;
+                viewWidth += SAFE_PADDING;
+                viewHeight += SAFE_PADDING;
 
                 boolean hasEmoji = false;
                 for (int i = 0; i < text.length(); i++) {
